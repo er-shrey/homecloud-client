@@ -1,0 +1,16 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
+  .dropdown-menu-right {
+    transform: translateX(-50%);
+  }
+
+  .main-container {
+    display: flex;
+    flex-grow: 1;
+    flex-basis: 0;
+    padding: 1rem;
+  }
+}

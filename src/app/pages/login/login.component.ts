@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import {
   FormsModule,
   ReactiveFormsModule,
@@ -6,7 +6,7 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
-
+import { ApiService } from '../../core/services/api.service';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -14,10 +14,10 @@ import {
   standalone: true,
   imports: [FormsModule, ReactiveFormsModule],
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent {
   loginForm: FormGroup;
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private apiService: ApiService) {
     this.loginForm = this.fb.group({
       username: ['', [Validators.required]],
       password: ['', [Validators.required]],
@@ -25,12 +25,13 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {}
-
   onSubmit(): void {
     if (this.loginForm.valid) {
       console.log('Form submitted:', this.loginForm.value);
-      // Here you can add your login logic
+      this.apiService.login(
+        this.loginForm.value.username,
+        this.loginForm.value.password
+      );
     }
   }
 }

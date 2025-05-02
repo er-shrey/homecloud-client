@@ -1,1 +1,57 @@
-<p>home works!</p>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="container-fluid">
+    <!-- Logo placeholder -->
+    <a class="navbar-brand" href="#">
+      <img
+        src="/homecloud-logo.png"
+        alt="Logo"
+        height="30"
+        class="d-inline-block align-text-top"
+      />
+    </a>
+
+    <!-- User dropdown -->
+    <div class="ms-auto">
+      <div ngbDropdown class="d-inline-block">
+        <button
+          class="btn btn-link dropdown-toggle btn-lg"
+          type="button"
+          id="userDropdown"
+          ngbDropdownToggle
+        >
+          <i class="fas fa-user-circle fa-lg"></i>
+        </button>
+        <div
+          ngbDropdownMenu
+          placement="bottom-right"
+          aria-labelledby="userDropdown"
+          class="dropdown-menu-right"
+        >
+          <button ngbDropdownItem (click)="goToSettings()">
+            <i class="fas fa-cog"></i> Settings
+          </button>
+          <div class="dropdown-divider"></div>
+          <button ngbDropdownItem (click)="logout()">
+            <i class="fas fa-sign-out-alt"></i> Logout
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- Secondary Menu Bar -->
+<nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom">
+  <div class="container-fluid">
+    <div class="d-flex gap-2">
+      <button class="btn btn-light" (click)="createFolder()">
+        <i class="fas fa-folder-plus"></i> Create Folder
+      </button>
+      <button class="btn btn-light" (click)="uploadFiles()">
+        <i class="fas fa-upload"></i> Upload Files
+      </button>
+    </div>
+  </div>
+</nav>
+
+<div class="main-container"></div>
