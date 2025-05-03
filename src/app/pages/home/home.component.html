@@ -45,8 +45,17 @@
   </div>
 </nav>
 
+<div class="only-mobile-view">
+  <app-breadcrumb
+    [path]="currentPath"
+    (navigateTo)="openFolder($event)"
+  ></app-breadcrumb>
+</div>
+
 <!-- Secondary Menu Bar -->
-<nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom">
+<nav
+  class="navbar navbar-expand-lg navbar-light bg-white border-bottom secondary-nav-bar"
+>
   <div class="container-fluid">
     <div class="d-flex gap-2">
       <button class="btn btn-light" (click)="createFolder()">

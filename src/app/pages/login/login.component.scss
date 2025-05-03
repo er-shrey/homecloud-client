@@ -1,0 +1,11 @@
+:host {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+
+  @media (max-width: 768px) {
+    padding-top: 2rem;
+    align-items: flex-start;
+  }
+}
