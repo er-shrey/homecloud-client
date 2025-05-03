@@ -23,3 +23,11 @@ export interface IRenameFolderResponse {
   oldFolderPath: string;
   newFolderPath: string;
 }
+
+export interface IFileUploadResponse {
+  success: boolean;
+  message: string;
+  file: string;
+  path: string;
+  thumbnail: string;
+}

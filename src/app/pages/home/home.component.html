@@ -55,6 +55,22 @@
       <button class="btn btn-light" (click)="uploadFiles()">
         <i class="fas fa-upload"></i> Upload Files
       </button>
+      @if(fileUploadProgress.uploadingStatus === UploadingStatus.UPLOADING) {
+      <div class="file-upload-progress-bar">
+        <span>Uploading in progress...</span>
+        <ngb-progressbar type="info" [value]="fileUploadProgress.progress"
+          >{{ fileUploadProgress.currentFileNumber }} of
+          {{ fileUploadProgress.totalFiles }}</ngb-progressbar
+        >
+      </div>
+      } @else if(fileUploadProgress.uploadingStatus ===
+      UploadingStatus.COMPLETED) {
+      <div class="file-upload-progress-bar fade show">
+        <span class="text-success">
+          <i class="fas fa-check-circle me-2"></i>Upload completed successfully
+        </span>
+      </div>
+      }
     </div>
   </div>
 </nav>

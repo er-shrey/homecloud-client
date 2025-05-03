@@ -77,3 +77,15 @@
     }
   }
 }
+
+.file-upload-progress-bar {
+  width: 500px;
+  max-width: 100%;
+  align-self: center;
+  display: flex;
+  align-items: center;
+
+  ngb-progressbar {
+    flex-grow: 1;
+  }
+}

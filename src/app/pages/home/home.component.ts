@@ -1,5 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
+import {
+  NgbDropdownModule,
+  NgbProgressbarModule,
+} from '@ng-bootstrap/ng-bootstrap';
 import { CommonModule } from '@angular/common';
 import { ApiService } from '../../core/services/api.service';
 import { NavigationService } from '../../core/services/navigation.service';
@@ -9,6 +12,10 @@ import { BreadcrumbComponent } from './breadcrumb/breadcrumb.component';
 import { CreateFolderComponent } from './create-folder/create-folder.component';
 import { FormsModule } from '@angular/forms';
 import { RenameFOlderComponent } from './rename-folder/rename-folder.component';
+import {
+  IFileUploadProgress,
+  UploadingStatus,
+} from '../../core/models/app.models';
 
 @Component({
   selector: 'app-home',
@@ -20,6 +27,7 @@ import { RenameFOlderComponent } from './rename-folder/rename-folder.component';
     CreateFolderComponent,
     RenameFOlderComponent,
     FormsModule,
+    NgbProgressbarModule,
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
@@ -32,6 +40,14 @@ export class HomeComponent implements OnInit {
   folderData!: IFolderData;
   currenItemDetails!: IFolderItem;
   currentPath: string = '/';
+  UploadingStatus = UploadingStatus;
+
+  fileUploadProgress: IFileUploadProgress = {
+    totalFiles: 0,
+    currentFileNumber: 0,
+    progress: 0,
+    uploadingStatus: UploadingStatus.IDLE,
+  };
 
   constructor(
     private apiService: ApiService,
@@ -51,11 +67,6 @@ export class HomeComponent implements OnInit {
       this.folderData = data;
       this.setRootPathDetails(data);
     });
-  }
-
-  uploadFiles() {
-    // TODO: Implement file upload logic
-    console.log('Upload files clicked');
   }
 
   logout() {
@@ -173,5 +184,58 @@ export class HomeComponent implements OnInit {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+  }
+
+  uploadFiles() {
+    // Create a file input element
+    const fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.multiple = true; // Allow multiple file selection
+
+    // Add change event listener
+    fileInput.addEventListener('change', (event) => {
+      const files = (event.target as HTMLInputElement).files;
+      if (files) {
+        this.fileUploadProgress.uploadingStatus = UploadingStatus.UPLOADING;
+        this.fileUploadProgress.totalFiles = files.length;
+        this.fileUploadProgress.currentFileNumber = 0;
+        this.fileUploadProgress.progress = 0;
+
+        // Convert FileList to Array and upload files sequentially
+        const fileArray = Array.from(files);
+        this.uploadNextFile(fileArray, 0);
+      }
+    });
+
+    // Trigger the file selection dialog
+    fileInput.click();
+  }
+
+  private uploadNextFile(files: File[], index: number) {
+    if (index >= files.length) {
+      // All files have been uploaded
+      this.fileUploadProgress.uploadingStatus = UploadingStatus.COMPLETED;
+      setTimeout(() => {
+        this.fileUploadProgress.uploadingStatus = UploadingStatus.IDLE;
+        this.openFolder(this.currentPath);
+      }, 5000);
+      return;
+    }
+
+    const file = files[index];
+    this.apiService.uploadFile(this.currentPath, file).subscribe({
+      next: (response) => {
+        // Update progress
+        this.fileUploadProgress.currentFileNumber = index + 1;
+        this.fileUploadProgress.progress = ((index + 1) / files.length) * 100;
+        // Upload next file
+        this.uploadNextFile(files, index + 1);
+      },
+      error: (error) => {
+        console.error(`Error uploading ${file.name}:`, error);
+        // Continue with next file even if there's an error
+        this.uploadNextFile(files, index + 1);
+      },
+    });
   }
 }

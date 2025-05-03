@@ -8,11 +8,13 @@ import {
   LOGOUT_API,
   CREATE_FOLDER_API,
   RENAME_FOLDER_API,
+  UPLOAD_API,
 } from '../constants/api.constants';
 import { jwtDecode } from 'jwt-decode';
 import { NavigationService } from './navigation.service';
 import {
   ICreateFolderResponse,
+  IFileUploadResponse,
   IFolderData,
   IRenameFolderResponse,
 } from '../models/api.models';
@@ -53,7 +55,7 @@ export class ApiService {
     localStorage.setItem('isAdmin', String(decodedToken.role === 'admin'));
   }
 
-  private disableLoggedinSession() {
+  disableLoggedinSession() {
     localStorage.removeItem('isLoggedIn');
     localStorage.removeItem('token');
     localStorage.removeItem('isAdmin');
@@ -82,5 +84,12 @@ export class ApiService {
       oldFolderPath,
       newFolderName,
     });
+  }
+
+  uploadFile(folderPath: string, file: File): Observable<IFileUploadResponse> {
+    const formData = new FormData();
+    formData.append('folderPath', folderPath);
+    formData.append('file', file);
+    return this.http.post<IFileUploadResponse>(UPLOAD_API, formData);
   }
 }
