@@ -51,10 +51,16 @@ The application will be available at `http://localhost:4200/`
 
 ## 🏗️ Build
 
-To build the project for production:
+To build the project for development:
 
 ```bash
 npm run build
+```
+
+To build the project for production (with optimizations):
+
+```bash
+npm run build:prod
 ```
 
 The build artifacts will be stored in the `dist/` directory.
