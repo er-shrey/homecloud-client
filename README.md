@@ -1,59 +1,103 @@
-# HomecloudClient
+# HomeCloud Client
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.1.6.
+A modern web application built with Angular for managing and accessing your home cloud storage system.
 
-## Development server
+## 🚀 Features
 
-To start a local development server, run:
+- Modern, responsive user interface built with Angular and Bootstrap
+- Secure authentication system
+- File management capabilities
+- Cross-platform compatibility
+- Real-time updates and notifications
+
+## 🛠️ Technology Stack
+
+- **Frontend Framework:** Angular 19.1
+- **UI Framework:** Bootstrap 5.3.3
+- **Icons:** Font Awesome 6.7.2
+- **Authentication:** JWT (JSON Web Tokens)
+- **Package Manager:** npm
+- **Language:** TypeScript
+
+## 📋 Prerequisites
+
+Before you begin, ensure you have the following installed:
+
+- Node.js (Latest LTS version recommended)
+- npm (comes with Node.js)
+- Angular CLI (`npm install -g @angular/cli`)
+
+## 🚀 Installation
+
+1. Clone the repository:
+
+   ```bash
+   git clone https://github.com/yourusername/homecloud-client.git
+   cd homecloud-client
+   ```
+
+2. Install dependencies:
+
+   ```bash
+   npm install
+   ```
+
+3. Start the development server:
+   ```bash
+   npm start
+   ```
+
+The application will be available at `http://localhost:4200/`
+
+## 🏗️ Build
+
+To build the project for production:
 
 ```bash
-ng serve
+npm run build
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+The build artifacts will be stored in the `dist/` directory.
 
-## Code scaffolding
+## 🧪 Testing
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+Run the unit tests:
 
 ```bash
-ng generate component component-name
+npm test
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+## 📦 Project Structure
 
-```bash
-ng generate --help
+```
+homecloud-client/
+├── src/                    # Source files
+├── public/                 # Public assets
+├── .angular/              # Angular configuration
+├── .vscode/              # VS Code configuration
+└── ...config files
 ```
 
-## Building
+## 👥 Contributors
 
-To build the project run:
+[Shrey Jain](https://github.com/er-shrey)
 
-```bash
-ng build
-```
+## 📝 License
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+This project is licensed under the terms of the license included in the repository.
 
-## Running unit tests
+## 🤝 Contributing
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
 
-```bash
-ng test
-```
+## 📫 Support
 
-## Running end-to-end tests
+For support, please open an issue in the GitHub repository or contact the maintainers.
 
-For end-to-end (e2e) testing, run:
+---
 
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+Made with ❤️ by the HomeCloud Team
