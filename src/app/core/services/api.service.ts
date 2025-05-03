@@ -7,10 +7,15 @@ import {
   LOGIN_API,
   LOGOUT_API,
   CREATE_FOLDER_API,
+  RENAME_FOLDER_API,
 } from '../constants/api.constants';
 import { jwtDecode } from 'jwt-decode';
 import { NavigationService } from './navigation.service';
-import { ICreateFolderResponse, IFolderData } from '../models/api.models';
+import {
+  ICreateFolderResponse,
+  IFolderData,
+  IRenameFolderResponse,
+} from '../models/api.models';
 
 @Injectable({
   providedIn: 'root',
@@ -66,6 +71,16 @@ export class ApiService {
     return this.http.post<ICreateFolderResponse>(CREATE_FOLDER_API, {
       folderPath,
       folderName,
+    });
+  }
+
+  renameFolder(
+    oldFolderPath: string,
+    newFolderName: string
+  ): Observable<IRenameFolderResponse> {
+    return this.http.put<IRenameFolderResponse>(RENAME_FOLDER_API, {
+      oldFolderPath,
+      newFolderName,
     });
   }
 }

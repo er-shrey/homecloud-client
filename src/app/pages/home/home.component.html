@@ -99,10 +99,26 @@
         </tr>
       </tbody>
     </table>
-    }
+    @if(currenItemDetails.type === 'directory') {
+    <button class="btn btn-warning" (click)="renameFolder()">Rename</button>
+    } @else if(currenItemDetails.type === '') {
+    <div class="alert alert-info" role="alert">
+      <i class="fas fa-info-circle"></i> Move to parent folder to rename this
+      Folder
+    </div>
+    } @else {
+    <button class="btn btn-primary" (click)="downloadFile()">Download</button>
+    } }
   </div>
 </div>
 
 <app-create-folder
   (folderCreated)="onFolderCreated($event)"
 ></app-create-folder>
+
+@if(currenItemDetails){
+<app-rename-folder
+  [currentFolderName]="currenItemDetails.name"
+  (folderRenamed)="onFolderRenamed($event)"
+></app-rename-folder>
+}

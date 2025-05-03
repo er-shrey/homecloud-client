@@ -16,3 +16,10 @@ export interface ICreateFolderResponse {
   message: string;
   folderPath: string;
 }
+
+export interface IRenameFolderResponse {
+  status: string;
+  message: string;
+  oldFolderPath: string;
+  newFolderPath: string;
+}

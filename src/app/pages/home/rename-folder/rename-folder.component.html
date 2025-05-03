@@ -1,1 +1,42 @@
-<p>rename-folder works!</p>
+<!-- Modal -->
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">
+      Rename Folder : {{ currentFolderName }}
+    </h4>
+  </div>
+
+  <div class="modal-body">
+    <form #createFolderForm="ngForm">
+      <div class="mb-3">
+        <label for="folderName" class="form-label">Rename to</label>
+        <input
+          type="text"
+          class="form-control"
+          id="folderName"
+          name="folderName"
+          [(ngModel)]="folderName"
+          required
+        />
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-secondary"
+      data-bs-dismiss="modal"
+      (click)="closeModal()"
+    >
+      Close
+    </button>
+    <button
+      type="button"
+      class="btn btn-primary"
+      (click)="onRenamed()"
+      [disabled]="!createFolderForm.form.valid"
+    >
+      Create
+    </button>
+  </div>
+</ng-template>

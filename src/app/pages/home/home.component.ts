@@ -8,6 +8,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { BreadcrumbComponent } from './breadcrumb/breadcrumb.component';
 import { CreateFolderComponent } from './create-folder/create-folder.component';
 import { FormsModule } from '@angular/forms';
+import { RenameFOlderComponent } from './rename-folder/rename-folder.component';
 
 @Component({
   selector: 'app-home',
@@ -17,6 +18,7 @@ import { FormsModule } from '@angular/forms';
     NgbDropdownModule,
     BreadcrumbComponent,
     CreateFolderComponent,
+    RenameFOlderComponent,
     FormsModule,
   ],
   templateUrl: './home.component.html',
@@ -25,6 +27,8 @@ import { FormsModule } from '@angular/forms';
 export class HomeComponent implements OnInit {
   @ViewChild(CreateFolderComponent)
   createFolderComponent!: CreateFolderComponent;
+  @ViewChild(RenameFOlderComponent)
+  renameFolderComponent!: RenameFOlderComponent;
   folderData!: IFolderData;
   currenItemDetails!: IFolderItem;
   currentPath: string = '/';
@@ -99,7 +103,7 @@ export class HomeComponent implements OnInit {
   setRootPathDetails(data: IFolderData) {
     this.currenItemDetails = {
       name: data.path,
-      type: 'folder',
+      type: '',
       size: data.items.reduce((acc, item) => acc + item.size, 0),
       lastModified:
         data.items.length > 0
@@ -132,5 +136,42 @@ export class HomeComponent implements OnInit {
         };
         this.folderData.items.unshift(newFolder);
       });
+  }
+
+  renameFolder() {
+    this.renameFolderComponent.open();
+  }
+
+  onFolderRenamed(newName: string) {
+    this.apiService
+      .renameFolder(
+        this.currentPath + '/' + this.currenItemDetails.name,
+        newName
+      )
+      .subscribe((data) => {
+        // Update the folder name in folderData.items
+        const folderToUpdate = this.folderData.items.find(
+          (item) =>
+            item.type === 'directory' &&
+            item.name === this.currenItemDetails.name
+        );
+        if (folderToUpdate) {
+          folderToUpdate.name = newName;
+          this.currenItemDetails.name = newName;
+        }
+      });
+  }
+
+  downloadFile() {
+    const downloadUrl =
+      '/api/files' + this.folderData.path + '/' + this.currenItemDetails.name;
+
+    // Create a temporary anchor element
+    const link = document.createElement('a');
+    link.href = downloadUrl;
+    link.download = this.currenItemDetails.name; // Set the download filename
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   }
 }
