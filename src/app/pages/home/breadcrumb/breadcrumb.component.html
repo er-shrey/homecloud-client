@@ -1,0 +1,10 @@
+<ol class="breadcrumb">
+  <li
+    class="breadcrumb-item"
+    *ngFor="let item of breadcrumbItem; let last = last; let i = index"
+    [class.active]="last"
+    (click)="selectedBreadcrumb(i)"
+  >
+    {{ item }}
+  </li>
+</ol>

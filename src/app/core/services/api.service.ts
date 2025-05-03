@@ -2,9 +2,15 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
 import { ILoginResponse, IUser } from '../models/auth.model';
-import { LOGIN_API, LOGOUT_API } from '../constants/api.constants';
+import {
+  FILE_LIST_API,
+  LOGIN_API,
+  LOGOUT_API,
+  CREATE_FOLDER_API,
+} from '../constants/api.constants';
 import { jwtDecode } from 'jwt-decode';
 import { NavigationService } from './navigation.service';
+import { ICreateFolderResponse, IFolderData } from '../models/api.models';
 
 @Injectable({
   providedIn: 'root',
@@ -47,5 +53,19 @@ export class ApiService {
     localStorage.removeItem('token');
     localStorage.removeItem('isAdmin');
     this.navigationService.goToLogin();
+  }
+
+  listFolderData(path: string): Observable<IFolderData> {
+    return this.http.get<IFolderData>(FILE_LIST_API + '?path=' + path);
+  }
+
+  createFolder(
+    folderPath: string,
+    folderName: string
+  ): Observable<ICreateFolderResponse> {
+    return this.http.post<ICreateFolderResponse>(CREATE_FOLDER_API, {
+      folderPath,
+      folderName,
+    });
   }
 }

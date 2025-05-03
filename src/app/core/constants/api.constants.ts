@@ -1,2 +1,11 @@
 export const LOGIN_API = '/api/auth/login';
 export const LOGOUT_API = '/api/auth/logout';
+export const HEALTH_API = '/api/health';
+export const UPLOAD_API = '/api/upload';
+export const FILE_LIST_API = '/api/list';
+export const CREATE_FOLDER_API = '/api/folder/create';
+export const FOLDER_RENAME_API = '/api/folder/rename';
+export const LIST_USER_NAME_API = '/api/users';
+export const ADD_USER_API = '/api/users';
+export const DELETE_USER_API = '/api/users';
+export const RESET_PASSWORD_API = '/api/users/reset-password';

@@ -1,25 +1,52 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { CommonModule } from '@angular/common';
 import { ApiService } from '../../core/services/api.service';
 import { NavigationService } from '../../core/services/navigation.service';
+import { IFolderData, IFolderItem } from '../../core/models/api.models';
+import { ActivatedRoute, Router } from '@angular/router';
+import { BreadcrumbComponent } from './breadcrumb/breadcrumb.component';
+import { CreateFolderComponent } from './create-folder/create-folder.component';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, NgbDropdownModule],
+  imports: [
+    CommonModule,
+    NgbDropdownModule,
+    BreadcrumbComponent,
+    CreateFolderComponent,
+    FormsModule,
+  ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
 })
-export class HomeComponent {
+export class HomeComponent implements OnInit {
+  @ViewChild(CreateFolderComponent)
+  createFolderComponent!: CreateFolderComponent;
+  folderData!: IFolderData;
+  currenItemDetails!: IFolderItem;
+  currentPath: string = '/';
+
   constructor(
     private apiService: ApiService,
-    private navigationService: NavigationService
-  ) {}
+    private navigationService: NavigationService,
+    private route: ActivatedRoute,
+    private router: Router
+  ) {
+    this.route.queryParams.subscribe((params) => {
+      if (params['path']) {
+        this.currentPath = params['path'];
+      }
+    });
+  }
 
-  createFolder() {
-    // TODO: Implement folder creation logic
-    console.log('Create folder clicked');
+  ngOnInit(): void {
+    this.apiService.listFolderData(this.currentPath).subscribe((data) => {
+      this.folderData = data;
+      this.setRootPathDetails(data);
+    });
   }
 
   uploadFiles() {
@@ -33,5 +60,77 @@ export class HomeComponent {
 
   goToSettings() {
     this.navigationService.goToSettings();
+  }
+
+  selectItem(item: IFolderItem) {
+    this.currenItemDetails = item;
+  }
+
+  openItem(item: IFolderItem) {
+    if (item.type === 'directory') {
+      // Update current path by appending the directory name
+      const newPath =
+        this.currentPath === '/'
+          ? `/${item.name}`
+          : `${this.currentPath}/${item.name}`;
+      this.currentPath = newPath;
+
+      this.openFolder(newPath);
+    } else {
+      // TODO: Implement file opening logic
+      console.log('Opening file:', item);
+    }
+  }
+
+  openFolder(path: string) {
+    this.currentPath = path;
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: { path: path },
+    });
+
+    // Navigate into the folder
+    this.apiService.listFolderData(this.currentPath).subscribe((data) => {
+      this.folderData = data;
+      this.setRootPathDetails(data);
+    });
+  }
+
+  setRootPathDetails(data: IFolderData) {
+    this.currenItemDetails = {
+      name: data.path,
+      type: 'folder',
+      size: data.items.reduce((acc, item) => acc + item.size, 0),
+      lastModified:
+        data.items.length > 0
+          ? data.items.reduce(
+              (latest, item) =>
+                new Date(item.lastModified) > new Date(latest)
+                  ? item.lastModified
+                  : latest,
+              data.items[0].lastModified
+            )
+          : new Date().toISOString(),
+      thumbnail: '/fallbacks/thumbnail/folder_thumbnail.png',
+    };
+  }
+
+  createFolder() {
+    this.createFolderComponent.open();
+  }
+
+  onFolderCreated(folderName: string) {
+    this.apiService
+      .createFolder(this.currentPath, folderName)
+      .subscribe((data) => {
+        const newFolder: IFolderItem = {
+          name: folderName,
+          type: 'directory',
+          size: 0,
+          lastModified: new Date().toISOString(),
+          thumbnail: '/fallbacks/thumbnail/folder_thumbnail.png',
+        };
+        this.folderData.items.unshift(newFolder);
+      });
   }
 }

@@ -1,0 +1,9 @@
+:host {
+  .breadcrumb-item {
+    cursor: pointer;
+
+    &:hover {
+      color: #007bff;
+    }
+  }
+}

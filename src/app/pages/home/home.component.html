@@ -10,6 +10,11 @@
       />
     </a>
 
+    <app-breadcrumb
+      [path]="currentPath"
+      (navigateTo)="openFolder($event)"
+    ></app-breadcrumb>
+
     <!-- User dropdown -->
     <div class="ms-auto">
       <div ngbDropdown class="d-inline-block">
@@ -54,4 +59,50 @@
   </div>
 </nav>
 
-<div class="main-container"></div>
+<div class="main-container">
+  <div class="folder-item-container">
+    @if(folderData) { @for(item of folderData.items; track item.name) {
+    <div
+      class="folder-item"
+      (click)="selectItem(item)"
+      (dblclick)="openItem(item)"
+      [class.selected]="currenItemDetails.name === item.name"
+    >
+      <img [src]="item.thumbnail" [alt]="item.name" />
+      <div class="folder-item-info">
+        {{ item.name }}
+      </div>
+    </div>
+    } }
+  </div>
+
+  <div class="item-details">
+    @if(currenItemDetails) {
+    <img [src]="currenItemDetails.thumbnail" [alt]="currenItemDetails.name" />
+    <table class="table table-borderless">
+      <tbody>
+        <tr>
+          <td class="fw-bold">Name:</td>
+          <td>{{ currenItemDetails.name }}</td>
+        </tr>
+        <tr>
+          <td class="fw-bold">Type:</td>
+          <td>{{ currenItemDetails.type }}</td>
+        </tr>
+        <tr>
+          <td class="fw-bold">Size:</td>
+          <td>{{ currenItemDetails.size | number }} bytes</td>
+        </tr>
+        <tr>
+          <td class="fw-bold">Last Modified:</td>
+          <td>{{ currenItemDetails.lastModified | date : "medium" }}</td>
+        </tr>
+      </tbody>
+    </table>
+    }
+  </div>
+</div>
+
+<app-create-folder
+  (folderCreated)="onFolderCreated($event)"
+></app-create-folder>
